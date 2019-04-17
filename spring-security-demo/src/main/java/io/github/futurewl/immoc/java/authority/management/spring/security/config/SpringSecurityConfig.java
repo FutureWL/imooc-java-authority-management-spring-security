@@ -1,5 +1,6 @@
 package io.github.futurewl.immoc.java.authority.management.spring.security.config;
 
+import io.github.futurewl.immoc.java.authority.management.spring.security.coder.MyPasswordEncoder;
 import io.github.futurewl.immoc.java.authority.management.spring.security.service.MyUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -17,17 +18,27 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Configuration
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private MyUserService myUserService;
+    private final MyUserService myUserService;
+
+    public SpringSecurityConfig(MyUserService myUserService) {
+        this.myUserService = myUserService;
+    }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("admin").password("123456").roles("ADMIN");
-        auth.inMemoryAuthentication().withUser("zhangsan").password("zhangsan").roles("ADMIN");
-        auth.inMemoryAuthentication().withUser("demo").password("demo").roles("USER");
+
+//        auth.inMemoryAuthentication().withUser("admin").password("123456").roles("ADMIN");
+//        auth.inMemoryAuthentication().withUser("zhangsan").password("zhangsan").roles("ADMIN");
+//        auth.inMemoryAuthentication().withUser("demo").password("demo").roles("USER");
 
         // 应用数据库的用户数据
-        auth.userDetailsService(myUserService);
+//         auth.userDetailsService(myUserService);
+
+        auth.userDetailsService(myUserService).passwordEncoder(new MyPasswordEncoder());
+
+        // 默认的 JDBC 认证 需要创建 Spring security 提供的 users.ddl 数据库
+        auth.jdbcAuthentication().usersByUsernameQuery("").authoritiesByUsernameQuery("").passwordEncoder(new MyPasswordEncoder());
+
     }
 
     @Override
@@ -48,10 +59,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers(
-                "/js/**",
-                "/css/**",
-                "/images/**"
-        );
+        web.ignoring().antMatchers("/js/**", "/css/**", "/images/**");
     }
 }

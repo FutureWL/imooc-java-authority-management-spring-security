@@ -6,8 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="apache-shiro-demo" />
-        <module name="spring-security-demo" />
+        <module name="imooc-java-authority-management" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

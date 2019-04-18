@@ -19,19 +19,18 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class TestController {
 
-
     @RequestMapping("/login")
-    private String login() {
+    public String login() {
         return "login";
     }
 
     @RequestMapping("/index")
-    private String index() {
+    public String index() {
         return "index";
     }
 
-    @RequestMapping("/loginUser")
-    private String loginUser(
+    @RequestMapping(value = "/loginUser")
+    public String loginUser(
             @RequestParam("username") String username,
             @RequestParam("password") String password,
             HttpSession session
